@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+  <title>قصة</title>
+  <meta name="theme-color" content="#0b5fff">
+  <style>
+    *{box-sizing:border-box}html,body{margin:0;padding:0}
+    body{font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:#0b0e14;color:#e8eaf0}
+    .wrap{max-width:800px;margin:0 auto;padding:24px}
+    a.back{display:inline-block;margin-bottom:8px;color:#8fb3ff;text-decoration:none}
+    a.back:hover{text-decoration:underline}
+    h1{margin:4px 0 8px;font-size:26px}
+    .sub{opacity:.8;margin:0 0 8px}
+    .content{line-height:1.9;font-size:19px;background:#0f1420;border:1px solid #1b2231;border-radius:12px;padding:16px}
+    .content p{margin:0 0 14px}
+    .footer{margin-top:20px;opacity:.7;font-size:12px}
+    .error{color:#ffb4b4;background:#2a1111;border:1px solid #442222;padding:12px;border-radius:10px}
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <a class="back" href="index.html">← كل القصص</a>
+    <article id="story">
+      <h1 id="title">جاري التحميل…</h1>
+      <p id="subtitle" class="sub"></p>
+      <div id="content" class="content"></div>
+      <div id="foot" class="footer"></div>
+    </article>
+  </main>
+  <script src="stories.js"></script>
+  <script>
+    (function(){
+      function qs(name){var p=new URLSearchParams(location.search);return p.get(name);}
+      var id = qs('id');
+      var db = window.NFC_STORIES;
+      var s = (db.stories||[]).find(function(x){return x.id===id}) || db.stories[0];
+      if(!s){document.getElementById('story').innerHTML='<p class="error">لم يتم العثور على القصة.</p>';return;}
+      document.title = s.title + ' — قصص NFC';
+      document.getElementById('title').textContent = s.title;
+      document.getElementById('subtitle').textContent = s.subtitle || '';
+      document.getElementById('content').innerHTML = s.html || '<p>لا يوجد نص.</p>';
+      document.getElementById('foot').textContent = s.footer || '';
+      window.scrollTo(0,0);
+    })();
+  </script>
+</body>
+</html>

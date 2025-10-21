@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+  <title>قصص NFC</title>
+  <meta name="theme-color" content="#0b5fff">
+  <style>
+    *{box-sizing:border-box}html,body{margin:0;padding:0}
+    body{font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:#0b0e14;color:#e8eaf0}
+    .wrap{max-width:800px;margin:0 auto;padding:24px}
+    h1{margin:0 0 8px;font-weight:800;font-size:28px}
+    .sub{opacity:.8;margin-top:4px}
+    ul{list-style:none;padding:0;margin:16px 0;display:grid;grid-template-columns:1fr;gap:12px}
+    a.card{display:block;padding:16px;border-radius:12px;background:#121723;text-decoration:none;color:#e8eaf0;border:1px solid #1b2231}
+    a.card h2{margin:0 0 6px;font-size:20px}
+    a.card p{margin:0;opacity:.8}
+    .footer{margin-top:20px;opacity:.7;font-size:12px}
+    @media (min-width:720px){ul{grid-template-columns:1fr 1fr}}
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <h1>📖 قصص NFC</h1>
+    <p class="sub">قرّب هاتفك من الوسم لفتح القصة. اجعل رابط الوسم يشير إلى <code>story.html?id=&lt;المعرف&gt;</code>.</p>
+    <ul id="list"></ul>
+    <p class="footer">موقع بسيط يعمل بدون إنترنت خارجي. لإضافة قصص جديدة عدّل ملف <code>stories.js</code>.</p>
+  </main>
+  <script src="stories.js"></script>
+  <script>
+    (function(){
+      var list = document.getElementById('list');
+      window.NFC_STORIES.stories.forEach(function(s){
+        var li = document.createElement('li');
+        li.innerHTML = '<a class="card" href="story.html?id=' + encodeURIComponent(s.id) +
+          '"><h2>' + s.title + '</h2><p>' + (s.subtitle||'') + '</p></a>';
+        list.appendChild(li);
+      });
+    })();
+  </script>
+</body>
+</html>
