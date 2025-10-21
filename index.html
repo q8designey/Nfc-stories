@@ -1,39 +1,57 @@
 <!doctype html>
-<html lang="ar" dir="rtl">
+<html lang="en" dir="ltr">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
-  <title>قصص NFC</title>
+  <title>NFC Stories • Bilingual</title>
   <meta name="theme-color" content="#0b5fff">
   <style>
     *{box-sizing:border-box}html,body{margin:0;padding:0}
     body{font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:#0b0e14;color:#e8eaf0}
-    .wrap{max-width:800px;margin:0 auto;padding:24px}
+    .wrap{max-width:900px;margin:0 auto;padding:24px}
     h1{margin:0 0 8px;font-weight:800;font-size:28px}
-    .sub{opacity:.8;margin-top:4px}
-    ul{list-style:none;padding:0;margin:16px 0;display:grid;grid-template-columns:1fr;gap:12px}
-    a.card{display:block;padding:16px;border-radius:12px;background:#121723;text-decoration:none;color:#e8eaf0;border:1px solid #1b2231}
-    a.card h2{margin:0 0 6px;font-size:20px}
-    a.card p{margin:0;opacity:.8}
-    .footer{margin-top:20px;opacity:.7;font-size:12px}
-    @media (min-width:720px){ul{grid-template-columns:1fr 1fr}}
+    .row{display:flex;gap:12px;flex-wrap:wrap;align-items:center}
+    .lang{margin-left:auto;display:flex;gap:8px}
+    .btn{background:#121723;border:1px solid #1b2231;border-radius:10px;padding:8px 12px;color:#e8eaf0;text-decoration:none}
+    .btn:hover{border-color:#2a3a56}
+    ul{list-style:none;padding:0;margin:16px 0;display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    a.card{display:block;padding:14px;border-radius:12px;background:#121723;text-decoration:none;color:#e8eaf0;border:1px solid #1b2231}
+    a.card h2{margin:0 0 6px;font-size:18px}
+    a.card p{margin:0;opacity:.85}
+    .hint{opacity:.75;margin-top:8px}
+    @media (max-width:640px){ul{grid-template-columns:1fr}}
   </style>
 </head>
 <body>
   <main class="wrap">
-    <h1>📖 قصص NFC</h1>
-    <p class="sub">قرّب هاتفك من الوسم لفتح القصة. اجعل رابط الوسم يشير إلى <code>story.html?id=&lt;المعرف&gt;</code>.</p>
+    <div class="row">
+      <h1>📖 NFC Stories</h1>
+      <div class="lang">
+        <a class="btn" href="#" onclick="setLang('en')">English</a>
+        <a class="btn" href="#" onclick="setLang('ar')">العربية</a>
+      </div>
+    </div>
+    <p class="hint" id="intro">Choose a language, then tap a story. NFC tags can link to a specific language with <code>&lang=en</code> or <code>&lang=ar</code>.</p>
     <ul id="list"></ul>
-    <p class="footer">موقع بسيط يعمل بدون إنترنت خارجي. لإضافة قصص جديدة عدّل ملف <code>stories.js</code>.</p>
   </main>
   <script src="stories.js"></script>
   <script>
+    function getLang(){return localStorage.getItem('lang')||'ar';}
+    function setLang(l){localStorage.setItem('lang',l);location.reload();}
+    function t(o){var l=getLang();return (l==='ar'?(o.ar||o.en):(o.en||o.ar));}
     (function(){
-      var list = document.getElementById('list');
-      window.NFC_STORIES.stories.forEach(function(s){
-        var li = document.createElement('li');
-        li.innerHTML = '<a class="card" href="story.html?id=' + encodeURIComponent(s.id) +
-          '"><h2>' + s.title + '</h2><p>' + (s.subtitle||'') + '</p></a>';
+      var l=getLang();
+      document.documentElement.lang=l;
+      document.documentElement.dir=(l==='ar'?'rtl':'ltr');
+      document.getElementById('intro').innerHTML = (l==='ar'
+        ? 'اختر اللغة ثم اضغط على القصة. يمكن لوَسْم الـNFC أن يشير مباشرةً إلى لغة محددة عبر ‎<code>&lang=ar</code> أو ‎<code>&lang=en</code>.'
+        : 'Choose a language, then tap a story. NFC tags can link to a specific language via <code>&lang=en</code> or <code>&lang=ar</code>.');
+      var list=document.getElementById('list');
+      window.NFC_DB.forEach(function(s){
+        var li=document.createElement('li');
+        var title=t(s.title), sub=t(s.subtitle);
+        var href='story.html?id='+encodeURIComponent(s.id)+'&lang='+l+'&page=1';
+        li.innerHTML='<a class="card" href="'+href+'"><h2>'+title+'</h2><p>'+ (sub||'') +'</p></a>';
         list.appendChild(li);
       });
     })();

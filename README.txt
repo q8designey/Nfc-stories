@@ -1,11 +1,12 @@
-# موقع قصص NFC (عربي)
-هذا الموقع جاهز للرفع على أي استضافة ثابتة (GitHub Pages / Netlify). لا يستخدم أي ملفات خارجية.
+# NFC Stories — Bilingual & Multi‑Page
+Files:
+- index.html — language chooser + story list
+- story.html — pagination with ?id=...&lang=ar|en&page=1..N
+- stories.js — bilingual content + pages
+- assets/img/*.png — placeholder images
 
-## الروابط
-- الصفحة الرئيسية: index.html
-- صفحة القصة: story.html?id=<المعرف>
-- القصص: stories.js (يمكن تعديل النصوص وإضافة قصص جديدة)
-
-## أمثلة
-- story.html?id=layla-waltheeb
-- story.html?id=altheeb-walanzat
+Example NFC URLs:
+- Layla (Arabic): story.html?id=layla-waltheeb&lang=ar&page=1
+- Layla (English): story.html?id=layla-waltheeb&lang=en&page=1
+- Goats (Arabic): story.html?id=altheeb-walanzat&lang=ar&page=1
+- Goats (English): story.html?id=altheeb-walanzat&lang=en&page=1
