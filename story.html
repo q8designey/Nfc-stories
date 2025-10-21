@@ -1,82 +1,48 @@
 <!doctype html>
-<html lang="en" dir="ltr">
+<html lang="ar" dir="rtl">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
-  <title>Story</title>
+  <title>قصة</title>
   <meta name="theme-color" content="#0b5fff">
   <style>
     *{box-sizing:border-box}html,body{margin:0;padding:0}
     body{font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:#0b0e14;color:#e8eaf0}
-    .wrap{max-width:900px;margin:0 auto;padding:24px}
-    .top{display:flex;gap:8px;align-items:center}
-    .spacer{flex:1}
-    a.btn{background:#121723;border:1px solid #1b2231;border-radius:10px;padding:8px 12px;color:#e8eaf0;text-decoration:none}
-    a.btn:hover{border-color:#2a3a56}
-    h1{margin:10px 0 8px;font-size:26px}
-    .sub{opacity:.8;margin:0 0 12px}
-    .img{margin:6px 0 10px}
-    .img img{max-width:100%;border-radius:12px;border:1px solid #1b2231}
-    .content{line-height:1.85;font-size:19px;background:#0f1420;border:1px solid #1b2231;border-radius:12px;padding:16px}
+    .wrap{max-width:800px;margin:0 auto;padding:24px}
+    a.back{display:inline-block;margin-bottom:8px;color:#8fb3ff;text-decoration:none}
+    a.back:hover{text-decoration:underline}
+    h1{margin:4px 0 8px;font-size:26px}
+    .sub{opacity:.8;margin:0 0 8px}
+    .content{line-height:1.9;font-size:19px;background:#0f1420;border:1px solid #1b2231;border-radius:12px;padding:16px}
     .content p{margin:0 0 14px}
-    .nav{display:flex;justify-content:space-between;gap:8px;margin-top:14px}
-    .footer{opacity:.75;font-size:12px;margin-top:16px}
-    .pager{opacity:.8}
+    .footer{margin-top:20px;opacity:.7;font-size:12px}
+    .error{color:#ffb4b4;background:#2a1111;border:1px solid #442222;padding:12px;border-radius:10px}
   </style>
 </head>
 <body>
   <main class="wrap">
-    <div class="top">
-      <a class="btn" id="back" href="index.html">←</a>
-      <div class="spacer"></div>
-      <a class="btn" href="#" onclick="switchLang('en')">EN</a>
-      <a class="btn" href="#" onclick="switchLang('ar')">AR</a>
-    </div>
-    <article>
-      <h1 id="title">...</h1>
+    <a class="back" href="index.html">← كل القصص</a>
+    <article id="story">
+      <h1 id="title">جاري التحميل…</h1>
       <p id="subtitle" class="sub"></p>
-      <div class="img" id="imgWrap" hidden><img id="img" alt=""></div>
       <div id="content" class="content"></div>
-      <div class="nav">
-        <a class="btn" id="prev">« <span id="prevText">Prev</span></a>
-        <span class="pager" id="pager">1/1</span>
-        <a class="btn" id="next"><span id="nextText">Next</span> »</a>
-      </div>
-      <div class="footer" id="foot"></div>
+      <div id="foot" class="footer"></div>
     </article>
   </main>
   <script src="stories.js"></script>
   <script>
-    function qs(n){var p=new URLSearchParams(location.search);return p.get(n);}
-    function getLang(){return (qs('lang')||localStorage.getItem('lang')||'ar');}
-    function setLang(l){localStorage.setItem('lang',l);}
-    function switchLang(l){setLang(l); var id=qs('id'); var page=qs('page')||'1'; location.href='story.html?id='+encodeURIComponent(id)+'&lang='+l+'&page='+page;}
-    function t(o){var l=getLang();return (l==='ar'?(o.ar||o.en):(o.en||o.ar));}
     (function(){
-      var id=qs('id'), page=parseInt(qs('page')||'1',10);
-      var lang=getLang(); document.documentElement.lang=lang; document.documentElement.dir=(lang==='ar'?'rtl':'ltr');
-      var s = window.NFC_DB.find(function(x){return x.id===id}) || window.NFC_DB[0];
-      if(!s){document.getElementById('content').textContent='Story not found';return;}
-      document.getElementById('title').textContent=t(s.title);
-      document.getElementById('subtitle').textContent=t(s.subtitle)||'';
-      var pages = t(s.pages);
-      var total = pages.length;
-      if(page<1) page=1; if(page>total) page=total;
-      var data = pages[page-1];
-      document.getElementById('content').innerHTML=data.html || '';
-      var imgWrap=document.getElementById('imgWrap'), img=document.getElementById('img');
-      if(data.img){ img.src=data.img; imgWrap.hidden=false; } else { imgWrap.hidden=true; }
-      document.getElementById('pager').textContent = page + ' / ' + total;
-      document.getElementById('prevText').textContent = (lang==='ar'?'السابق':'Prev');
-      document.getElementById('nextText').textContent = (lang==='ar'?'التالي':'Next');
-      document.getElementById('back').textContent = (lang==='ar'?'← القائمة':'← Back');
-      // Buttons
-      var prev=document.getElementById('prev'), next=document.getElementById('next');
-      function nav(to){ location.href='story.html?id='+encodeURIComponent(id)+'&lang='+lang+'&page='+to; }
-      prev.onclick=function(){ if(page>1) nav(page-1); };
-      next.onclick=function(){ if(page<total) nav(page+1); };
-      // Footer
-      document.getElementById('foot').textContent = (t(s.footer) || '');
+      function qs(name){var p=new URLSearchParams(location.search);return p.get(name);}
+      var id = qs('id');
+      var db = window.NFC_STORIES;
+      var s = (db.stories||[]).find(function(x){return x.id===id}) || db.stories[0];
+      if(!s){document.getElementById('story').innerHTML='<p class="error">لم يتم العثور على القصة.</p>';return;}
+      document.title = s.title + ' — قصص NFC';
+      document.getElementById('title').textContent = s.title;
+      document.getElementById('subtitle').textContent = s.subtitle || '';
+      document.getElementById('content').innerHTML = s.html || '<p>لا يوجد نص.</p>';
+      document.getElementById('foot').textContent = s.footer || '';
+      window.scrollTo(0,0);
     })();
   </script>
 </body>
