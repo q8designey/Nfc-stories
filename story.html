@@ -1,49 +1,64 @@
 <!doctype html>
-<html lang="ar" dir="rtl">
+<html lang="en" dir="ltr">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
-  <title>قصة</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Story</title>
   <meta name="theme-color" content="#0b5fff">
   <style>
     *{box-sizing:border-box}html,body{margin:0;padding:0}
     body{font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:#0b0e14;color:#e8eaf0}
-    .wrap{max-width:800px;margin:0 auto;padding:24px}
-    a.back{display:inline-block;margin-bottom:8px;color:#8fb3ff;text-decoration:none}
-    a.back:hover{text-decoration:underline}
-    h1{margin:4px 0 8px;font-size:26px}
-    .sub{opacity:.8;margin:0 0 8px}
-    .content{line-height:1.9;font-size:19px;background:#0f1420;border:1px solid #1b2231;border-radius:12px;padding:16px}
-    .content p{margin:0 0 14px}
-    .footer{margin-top:20px;opacity:.7;font-size:12px}
-    .error{color:#ffb4b4;background:#2a1111;border:1px solid #442222;padding:12px;border-radius:10px}
+    .wrap{max-width:980px;margin:0 auto;padding:20px}
+    .top{display:flex;gap:8px;align-items:center}
+    .spacer{flex:1}
+    a.btn{background:#121723;border:1px solid #1b2231;border-radius:10px;padding:8px 12px;color:#e8eaf0;text-decoration:none}
+    a.btn:hover{border-color:#2a3a56}
+    h1{margin:12px 0 6px;font-size:26px}
+    .sub{opacity:.85;margin:0 0 12px}
+    .canvas{position:relative;perspective:1200px;margin:10px 0}
+    .page{background:#0f1420;border:1px solid #1b2231;border-radius:14px;overflow:hidden}
+    .page-inner{display:grid;grid-template-columns:52% 48%}
+    .page .img{display:flex;align-items:center;justify-content:center;background:#0b0e14;border-right:1px solid #1b2231}
+    .page .img img{width:100%;height:auto;max-height:420px;border-radius:10px}
+    .page .txt{padding:16px;line-height:1.9;font-size:18px}
+    .pager{opacity:.85;margin-top:8px;text-align:center}
+    .nav{display:flex;justify-content:space-between;gap:8px;margin-top:12px}
+    .flip-enter{transform:rotateY(-90deg);opacity:.5}
+    .flip-enter-active{transition:transform .5s ease, opacity .5s ease;transform:rotateY(0);opacity:1}
+    .flip-exit{transform:rotateY(0);opacity:1}
+    .flip-exit-active{transition:transform .5s ease, opacity .5s ease;transform:rotateY(90deg);opacity:.2}
+    html[dir="rtl"] .page-inner{grid-template-columns:48% 52%}
+    html[dir="rtl"] .page .img{order:2;border-right:none;border-left:1px solid #1b2231}
   </style>
 </head>
 <body>
   <main class="wrap">
-    <a class="back" href="index.html">← كل القصص</a>
-    <article id="story">
-      <h1 id="title">جاري التحميل…</h1>
+    <div class="top">
+      <a class="btn" id="back" href="index.html">←</a>
+      <div class="spacer"></div>
+      <a class="btn" href="#" onclick="switchLang('en')">EN</a>
+      <a class="btn" href="#" onclick="switchLang('ar')">AR</a>
+    </div>
+    <article>
+      <h1 id="title">...</h1>
       <p id="subtitle" class="sub"></p>
-      <div id="content" class="content"></div>
-      <div id="foot" class="footer"></div>
+      <div class="canvas">
+        <div id="page" class="page">
+          <div class="page-inner">
+            <div class="img"><img id="img" alt=""></div>
+            <div class="txt" id="content"></div>
+          </div>
+        </div>
+      </div>
+      <div class="pager" id="pager">1/1</div>
+      <div class="nav">
+        <a class="btn" id="prev">« <span id="prevText">Prev</span></a>
+        <a class="btn" id="next"><span id="nextText">Next</span> »</a>
+      </div>
+      <div class="pager" id="foot"></div>
     </article>
   </main>
-  <script src="stories.js"></script>
-  <script>
-    (function(){
-      function qs(name){var p=new URLSearchParams(location.search);return p.get(name);}
-      var id = qs('id');
-      var db = window.NFC_STORIES;
-      var s = (db.stories||[]).find(function(x){return x.id===id}) || db.stories[0];
-      if(!s){document.getElementById('story').innerHTML='<p class="error">لم يتم العثور على القصة.</p>';return;}
-      document.title = s.title + ' — قصص NFC';
-      document.getElementById('title').textContent = s.title;
-      document.getElementById('subtitle').textContent = s.subtitle || '';
-      document.getElementById('content').innerHTML = s.html || '<p>لا يوجد نص.</p>';
-      document.getElementById('foot').textContent = s.footer || '';
-      window.scrollTo(0,0);
-    })();
-  </script>
+  <script src="story.js"></script>
+  <script src="storydata.js"></script>
 </body>
 </html>
