@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 720">
+  <defs>
+    <linearGradient id="bg" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0%" stop-color="#0e1a2e"/>
+      <stop offset="100%" stop-color="#0b1422"/>
+    </linearGradient>
+  </defs>
+  <rect width="1280" height="720" fill="url(#bg)"/>
+  <rect x="10" y="10" width="1260" height="700" rx="24" fill="none" stroke="#1b2231" stroke-width="2"/>
+  <text x="40" y="80" fill="#cfe2ff" font-size="36" font-family="Arial">Big Teeth • أسنان كبيرة</text>
+  <g opacity="0.9">
+    <circle cx="300" cy="360" r="140" fill="#2c6e49"/>
+    <rect x="270" y="420" width="60" height="120" fill="#5b3d2e"/>
+    <circle cx="980" cy="360" r="140" fill="#2c6e49"/>
+    <rect x="950" y="420" width="60" height="120" fill="#5b3d2e"/>
+  </g>
+  <g>
+    <rect x="200" y="560" width="880" height="110" fill="#1a2a3f"/>
+    <circle cx="640" cy="600" r="30" fill="#ffd670"/>
+  </g>
+</svg>
